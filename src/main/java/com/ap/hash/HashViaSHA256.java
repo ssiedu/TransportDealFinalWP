@@ -1,0 +1,52 @@
+package com.ap.hash;
+
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import org.springframework.core.style.ToStringCreator;
+
+public class HashViaSHA256 {
+
+	public static String getSHA(String input) throws NoSuchAlgorithmException 
+    {  
+        // Static getInstance method is called with hashing SHA  
+        MessageDigest md = MessageDigest.getInstance("SHA-256");  
+  
+        // digest() method called  
+        // to calculate message digest of an input  
+        // and return array of byte 
+        return toHexString(md.digest(input.getBytes(StandardCharsets.UTF_8)));  
+    } 
+    
+    public static String toHexString(byte[] hash) 
+    { 
+        // Convert byte array into sign representation  
+        BigInteger number = new BigInteger(1, hash);//translates 2's complement representation into biginteger  
+  
+        // Convert message digest into hex value  
+        StringBuilder hexString = new StringBuilder(number.toString(16));  
+  
+        // Pad with leading zeros 
+        while (hexString.length() < 32)  
+        {  
+            hexString.insert(0, '0');  
+        }  
+  
+        return hexString.toString();  
+    } 
+  
+	public static void main(String args[]) throws NoSuchAlgorithmException {
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+//		System.out.println(new String(md.digest("abc".getBytes(StandardCharsets.UTF_8))));
+		String s1 = "hello"+"123";
+		String s2= "123#"+getSHA(s1);
+		System.out.println(s2);
+		String s = s2.substring(0, s2.indexOf('#',0));
+		System.out.println(s);
+//		System.out.println(toHexString(getSHA(s1)));
+		
+		 
+	}
+}
